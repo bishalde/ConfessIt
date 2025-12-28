@@ -32,7 +32,8 @@ export default function Home() {
       setCurrentUserId(user._id || user.id);
     }
     fetchConfessions();
-  }, [selectedCategory, fetchConfessions]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedCategory]);
 
   const fetchConfessions = async () => {
     setLoading(true);
