@@ -36,6 +36,9 @@ def update_profile():
         # Prepare update data
         update_data = {}
         
+        if 'fullName' in data:
+            update_data['fullName'] = data['fullName']
+        
         if 'username' in data:
             # Check if username is already taken by another user
             existing_user = users_collection.find_one({
@@ -58,6 +61,12 @@ def update_profile():
         
         if 'bio' in data:
             update_data['bio'] = data['bio']
+        
+        if 'gender' in data:
+            update_data['gender'] = data['gender']
+        
+        if 'age' in data:
+            update_data['age'] = data['age']
         
         # Update user
         if update_data:

@@ -8,6 +8,7 @@ import { authAPI } from '@/utils/api';
 export default function Signup() {
   const router = useRouter();
   const [formData, setFormData] = useState({
+    fullName: '',
     username: '',
     email: '',
     password: '',
@@ -41,6 +42,7 @@ export default function Signup() {
 
     try {
       const response = await authAPI.signup({
+        fullName: formData.fullName,
         username: formData.username,
         email: formData.email,
         password: formData.password,
@@ -78,6 +80,22 @@ export default function Signup() {
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
+              <label htmlFor="fullName" className="block text-sm font-medium text-gray-700 mb-2">
+                Full Name
+              </label>
+              <input
+                type="text"
+                id="fullName"
+                name="fullName"
+                value={formData.fullName}
+                onChange={handleChange}
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-violet-500 focus:border-transparent outline-none transition"
+                placeholder="Enter your full name"
+                required
+              />
+            </div>
+
+            <div>
               <label htmlFor="username" className="block text-sm font-medium text-gray-700 mb-2">
                 Username
               </label>
@@ -87,7 +105,7 @@ export default function Signup() {
                 name="username"
                 value={formData.username}
                 onChange={handleChange}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none transition"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-violet-500 focus:border-transparent outline-none transition"
                 placeholder="Choose a username"
                 required
               />

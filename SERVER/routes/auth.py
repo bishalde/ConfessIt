@@ -28,10 +28,13 @@ def signup():
         
         # Create user
         user = {
+            'fullName': data.get('fullName', ''),
             'username': data['username'],
             'email': data['email'],
             'password': hashed_password,
             'bio': '',
+            'gender': '',
+            'age': '',
             'createdAt': datetime.utcnow(),
         }
         

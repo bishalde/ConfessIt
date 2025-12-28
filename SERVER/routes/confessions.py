@@ -25,10 +25,22 @@ def get_confessions():
                           .skip((page - 1) * per_page)
                           .limit(per_page))
         
-        # Convert ObjectId to string
+        # Convert ObjectId to string and add user info
         for confession in confessions:
             confession['_id'] = str(confession['_id'])
-            confession['userId'] = str(confession['userId'])
+            user_id = confession['userId']
+            confession['userId'] = str(user_id)
+            
+            # Get user info
+            user = users_collection.find_one({'_id': ObjectId(user_id)})
+            if user:
+                confession['username'] = user.get('username', 'Anonymous')
+            else:
+                confession['username'] = 'Anonymous'
+            
+            # Ensure comments field exists
+            if 'comments' not in confession:
+                confession['comments'] = []
         
         return jsonify({'confessions': confessions}), 200
     
@@ -45,7 +57,15 @@ def get_confession(confession_id):
             return jsonify({'message': 'Confession not found'}), 404
         
         confession['_id'] = str(confession['_id'])
-        confession['userId'] = str(confession['userId'])
+        user_id = confession['userId']
+        confession['userId'] = str(user_id)
+        
+        # Get user info
+        user = users_collection.find_one({'_id': ObjectId(user_id)})
+        if user:
+            confession['username'] = user.get('username', 'Anonymous')
+        else:
+            confession['username'] = 'Anonymous'
         
         return jsonify({'confession': confession}), 200
     
@@ -73,6 +93,7 @@ def create_confession():
             'category': data.get('category', 'other'),
             'likes': 0,
             'likedBy': [],
+            'comments': [],
             'createdAt': datetime.utcnow(),
         }
         
@@ -147,6 +168,53 @@ def like_confession(confession_id):
                 }
             )
             return jsonify({'message': 'Liked', 'liked': True}), 200
+    
+    except Exception as e:
+        return jsonify({'message': str(e)}), 500
+
+@bp.route('/<confession_id>/comments', methods=['POST'])
+@jwt_required()
+def add_comment(confession_id):
+    try:
+        current_user_id = get_jwt_identity()
+        data = request.get_json()
+        
+        if not data.get('text'):
+            return jsonify({'message': 'Comment text is required'}), 400
+        
+        # Get user info
+        user = users_collection.find_one({'_id': ObjectId(current_user_id)})
+        
+        comment = {
+            'id': str(ObjectId()),
+            'userId': current_user_id,
+            'username': user.get('username', 'Anonymous') if user else 'Anonymous',
+            'text': data['text'],
+            'createdAt': datetime.utcnow().isoformat(),
+        }
+        
+        # Add comment to confession
+        confessions_collection.update_one(
+            {'_id': ObjectId(confession_id)},
+            {'$push': {'comments': comment}}
+        )
+        
+        return jsonify({'message': 'Comment added', 'comment': comment}), 201
+    
+    except Exception as e:
+        return jsonify({'message': str(e)}), 500
+
+@bp.route('/<confession_id>/comments', methods=['GET'])
+@jwt_required()
+def get_comments(confession_id):
+    try:
+        confession = confessions_collection.find_one({'_id': ObjectId(confession_id)})
+        
+        if not confession:
+            return jsonify({'message': 'Confession not found'}), 404
+        
+        comments = confession.get('comments', [])
+        return jsonify({'comments': comments}), 200
     
     except Exception as e:
         return jsonify({'message': str(e)}), 500

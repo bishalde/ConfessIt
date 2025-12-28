@@ -33,6 +33,8 @@ export const confessionAPI = {
   create: (confessionData) => api.post('/confessions', confessionData),
   delete: (id) => api.delete(`/confessions/${id}`),
   like: (id) => api.post(`/confessions/${id}/like`),
+  addComment: (id, commentData) => api.post(`/confessions/${id}/comments`, commentData),
+  getComments: (id) => api.get(`/confessions/${id}/comments`),
 };
 
 // User APIs
