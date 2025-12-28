@@ -1,0 +1,27 @@
+I want to create a website website name ConfessIt.
+
+
+1) FRONTEND : 
+it should be written in nextjs with js and tailwind use google fonts to make it look good. use multiple font wherever needed.
+
+It should have the following pages :
+- Login
+- Signup
+- Forgot Password
+- Homepage
+- Profile edit page 
+- page to post a confession
+- use some classification to classify it
+- page to see others confesstion
+
+
+make the website responsive and mobile friendly. and make it look modern and clean.
+it should look similar to instagram in terms of layout and design.and it should be easy to use and look moder and that could attract users.
+
+
+2) Server : 
+make it in poython flask with mongodb as database.
+depending upon the FRONTEND requirements create the necessary APIs for user authentication, posting confessions, viewing confessions, editing profiles etc.
+
+
+mongodb url mongodb+srv://bishalde:bishalde5741@confessitdb.bk2w8ll.mongodb.net/?appName=ConfessItDb
