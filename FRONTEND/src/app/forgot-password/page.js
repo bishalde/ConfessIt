@@ -42,7 +42,7 @@ export default function ForgotPassword() {
         <div className="bg-white rounded-2xl shadow-xl p-8">
           <h2 className="text-2xl font-semibold text-gray-800 mb-2 font-poppins">Forgot Password?</h2>
           <p className="text-gray-600 mb-6">
-            Enter your email address and we'll send you instructions to reset your password.
+            Enter your email address and we&apos;ll send you instructions to reset your password.
           </p>
           
           {error && (

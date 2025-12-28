@@ -32,7 +32,7 @@ export default function Home() {
       setCurrentUserId(user._id || user.id);
     }
     fetchConfessions();
-  }, [selectedCategory]);
+  }, [selectedCategory, fetchConfessions]);
 
   const fetchConfessions = async () => {
     setLoading(true);
